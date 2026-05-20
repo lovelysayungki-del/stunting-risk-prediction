@@ -11,58 +11,42 @@ st.write("Prediction Based on Socioeconomic Factors")
 
 st.subheader("Input Data")
 
-# INPUT USER
-stunting = st.number_input(
-    "Stunting Prevalence (%)",
-    0.0,100.0)
+stunting = st.number_input("Stunting Prevalence (%)", 0.0, 100.0)
+overweight = st.number_input("Overweight Prevalence (%)", 0.0, 100.0)
+gdp = st.number_input("GDP per Capita", 0.0)
+poverty = st.number_input("Poverty Rate (%)", 0.0, 100.0)
+male_lit = st.number_input("Male Literacy Rate (%)", 0.0, 100.0)
+female_lit = st.number_input("Female Literacy Rate (%)", 0.0, 100.0)
+fertility = st.number_input("Fertility Rate", 0.0, 10.0)
+urban = st.number_input("Urban Population Percent (%)", 0.0, 100.0)
 
-poverty = st.number_input(
-    "Poverty Rate (%)",
-    0.0,100.0)
-
-fertility = st.number_input(
-    "Fertility Rate",
-    0.0,10.0)
-
-female_lit = st.number_input(
-    "Female Literacy Rate (%)",
-    0.0,100.0)
-
-gdp = st.number_input(
-    "GDP per Capita",
-    0.0)
-
-urban = st.number_input(
-    "Urban Population Percent (%)",
-    0.0,100.0)
-
-# BUTTON PREDICT
 if st.button("Predict"):
 
+    # Column order must match numeric_cols used during scaler.fit_transform
     data = pd.DataFrame([[
         stunting,
-        poverty,
-        fertility,
-        female_lit,
+        overweight,
         gdp,
+        poverty,
+        male_lit,
+        female_lit,
+        fertility,
         urban
     ]],
     columns=[
         'Stunting_Prevalence',
-        'Poverty_Rate',
-        'Fertility_Rate',
-        'Female_Literacy_Rate',
+        'Overweight_Prevalence',
         'GDP_per_Capita',
+        'Poverty_Rate',
+        'Male_Literacy_Rate',
+        'Female_Literacy_Rate',
+        'Fertility_Rate',
         'Urban_Population_Percent'
     ])
 
-    # NORMALISASI
     scaled = scaler.transform(data)
-
-    # PREDIKSI
     pred = model.predict(scaled)[0]
 
-    # OUTPUT KELAS
     if pred == 0:
         result = "LOW RISK"
     elif pred == 1:
@@ -70,6 +54,4 @@ if st.button("Predict"):
     else:
         result = "HIGH RISK"
 
-    st.success(
-        f"Predicted Stunting Risk: {result}"
-    )
+    st.success(f"Predicted Stunting Risk: {result}")
